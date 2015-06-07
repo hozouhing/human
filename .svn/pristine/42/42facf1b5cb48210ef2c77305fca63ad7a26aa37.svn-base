@@ -1,0 +1,77 @@
+package com.jeff.util;
+
+import java.io.File;
+import java.io.FilenameFilter;
+import java.lang.reflect.Method;
+
+import javassist.ClassClassPath;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.CtMethod;
+import javassist.Modifier;
+import javassist.NotFoundException;
+import javassist.bytecode.CodeAttribute;
+import javassist.bytecode.LocalVariableAttribute;
+import javassist.bytecode.MethodInfo;
+
+public class ReflectUtil {
+	/**
+	 * 根据包获取所有的类
+	 * 
+	 * @param pName
+	 * @return
+	 */
+	public static String[] getClassByPackage(String pName) {
+		String pr = pName.replace(".", "/");
+		String pp = ReflectUtil.class.getClassLoader().getResource(pr)
+				.getPath();
+		File file = new File(pp);
+		String[] fs = file.list(new FilenameFilter() {
+			public boolean accept(File dir, String name) {
+				if (name.endsWith(".class"))
+					return true;
+				return false;
+			}
+		});
+		return fs;
+	}
+
+	/**
+	 * 根据方法名称取得反射方法的参数类型(没有考虑同名重载方法使用时注意)
+	 * 
+	 * @param targetcClass
+	 * 
+	 * @param obj
+	 *            类实例
+	 * @param methodName
+	 *            方法名
+	 * @return
+	 * @throws ClassNotFoundException
+	 * @throws NotFoundException
+	 */
+	public static String[] getMethodParamName(Class<?> targetcClass,
+			Method method) throws ClassNotFoundException, NotFoundException {
+		/**
+		 * 当在C/S环境下，只需要ClassPool pool = ClassPool.getDefault();即可以获取classPool，
+		 * 但是在B/S环境下，class的位置并不是在jvm默认的classpath中，而是在tomcat的classpath中
+		 * 所以要加上pool.insertClassPath(new ClassClassPath(ReflectUtil.class));
+		 */
+		ClassPool pool = ClassPool.getDefault();
+		pool.insertClassPath(new ClassClassPath(ReflectUtil.class));
+		CtClass cc = pool.get(targetcClass.getName());
+		CtMethod cm = cc.getDeclaredMethod(method.getName());
+		// 使用javaassist的反射方法获取方法的参数名
+		MethodInfo methodInfo = cm.getMethodInfo();
+		CodeAttribute codeAttribute = methodInfo.getCodeAttribute();
+		LocalVariableAttribute attr = (LocalVariableAttribute) codeAttribute
+				.getAttribute(LocalVariableAttribute.tag);
+		String[] paramNames = new String[cm.getParameterTypes().length];
+		int pos = Modifier.isStatic(cm.getModifiers()) ? 0 : 1;
+		for (int i = 0; i < paramNames.length; i++)
+			paramNames[i] = attr.variableName(i + pos);
+		// paramNames即参数名
+		// Class[] paramTypes = method.getParameterTypes();
+		return paramNames;
+	}
+
+}
