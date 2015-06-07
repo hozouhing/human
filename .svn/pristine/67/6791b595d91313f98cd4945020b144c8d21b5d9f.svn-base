@@ -40,7 +40,7 @@ public class DIContext {
 
 	private void initDIContext() throws Exception {
 		loggger.info("Begin to initailize the DI context...");
-		String pName = PropertiesUtil.getProp().getProperty("di_package");
+		String pName = PropertiesUtil.getMvcProp().getProperty("package");
 		if (pName.equals(""))
 			loggger.info("Could not find the property of the key called package...");
 		String[] ps = ReflectUtil.getClassByPackage(pName);

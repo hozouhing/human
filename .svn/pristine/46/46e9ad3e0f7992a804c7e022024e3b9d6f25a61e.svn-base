@@ -55,7 +55,7 @@ public class MvcContext {
 	 */
 	private void initInstancesAndActions() throws Exception {
 		logger.info("Begin to initial the mvc context...");
-		String pName = PropertiesUtil.getProp().getProperty("mvc_package");
+		String pName = PropertiesUtil.getMvcProp().getProperty("package");
 		if (pName.equals(""))
 			logger.info("Can not get the property of the key,package...");
 		String[] ps = ReflectUtil.getClassByPackage(pName);
@@ -122,7 +122,7 @@ public class MvcContext {
 	 */
 	private void initErrorPath() {
 		logger.info("Searching for the defined error page path");
-		String errorPath = PropertiesUtil.getProp().getProperty("error_page_path");
+		String errorPath = PropertiesUtil.getMvcProp().getProperty("errorPath");
 		if (errorPath == null) {
 			logger.info("Found to be null and configured to be the default path of \"/404.jsp\"");
 			errorPath = "/404.jsp";
@@ -136,8 +136,8 @@ public class MvcContext {
 	 */
 	private void initDefaultUploadPath() {
 		logger.info("Searching for the defined default upload path");
-		String defaultUploadPath = PropertiesUtil.getProp().getProperty(
-				"default_upload_path");
+		String defaultUploadPath = PropertiesUtil.getMvcProp().getProperty(
+				"defaultUploadPath");
 		if (defaultUploadPath == null) {
 			logger.info("Found to be null and configured to be the default path of \"/d:\\\"");
 			defaultUploadPath = "D:\\";
