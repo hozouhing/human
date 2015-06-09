@@ -5,7 +5,7 @@ import javax.servlet.ServletContextListener;
 
 import com.jeff.orm.OrmContext;
 
-public class MyServletContext implements ServletContextListener {
+public class MyServletContextListener implements ServletContextListener {
 
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {

@@ -33,6 +33,6 @@
 	</servlet-mapping>
 
 	<listener>
-		<listener-class>com.jeff.mvc.MyServletContext</listener-class>
+		<listener-class>com.jeff.mvc.MyServletContextListener</listener-class>
 	</listener>
 </web-app>

@@ -6,6 +6,7 @@ import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 
+import com.jeff.DI.DIContext;
 import com.jeff.orm.OrmContext;
 
 /**
@@ -14,14 +15,14 @@ import com.jeff.orm.OrmContext;
  * @author jeff he
  *
  */
-public class TransationHandler implements InvocationHandler {
+public class TransactionHandler implements InvocationHandler {
 
 	private static final Logger logger = Logger
-			.getLogger(TransationHandler.class);
+			.getLogger(TransactionHandler.class);
 
 	private Object target;
 
-	public TransationHandler(Object target) {
+	public TransactionHandler(Object target) {
 		super();
 		this.target = target;
 	}
@@ -59,9 +60,16 @@ public class TransationHandler implements InvocationHandler {
 	public Object invoke(Object proxy, Method method, Object[] args)
 			throws Throwable {
 		Object result = null;
-		openTransation();
-		result = method.invoke(target, args);
-		closeTransation();
+		String mName = method.getName();
+		String cName = method.getDeclaringClass().getName();
+		String match = cName + "." + mName;
+		// System.out.println(match);
+		if (DIContext.getInstance().getTxMethods().contains(match)) {
+			openTransation();
+			result = method.invoke(target, args);
+			closeTransation();
+		} else
+			result = method.invoke(target, args);
 		return result;
 	}
 
