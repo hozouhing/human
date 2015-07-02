@@ -128,7 +128,7 @@ public class DispatcherServlet extends HttpServlet {
 					targetMethod.invoke(targetInstance, args);
 				else {
 					Object ajaxData = targetMethod.invoke(targetInstance, args);
-					ajaxReq(returnType, ajaxData, response);
+					ajaxResp(returnType, ajaxData, response);
 				}
 			}
 			// 没有ajax标签
@@ -151,7 +151,7 @@ public class DispatcherServlet extends HttpServlet {
 					targetMethod.invoke(targetInstance, args);
 				} else {
 					Object ajaxData = targetMethod.invoke(targetInstance, args);
-					ajaxReq(returnType, ajaxData, response);
+					ajaxResp(returnType, ajaxData, response);
 				}
 			}
 		} catch (Exception e) {
@@ -161,7 +161,7 @@ public class DispatcherServlet extends HttpServlet {
 		}
 	}
 
-	private void ajaxReq(Class<?> returnType, Object ajaxData,
+	private void ajaxResp(Class<?> returnType, Object ajaxData,
 			HttpServletResponse response) {
 		if (returnType == List.class || returnType == ArrayList.class
 				|| returnType == Set.class || returnType == HashSet.class)
@@ -290,6 +290,5 @@ public class DispatcherServlet extends HttpServlet {
 		return null;
 	}
 
-	// ------------------------------------------------------------------------------------------------------------------
 
 }

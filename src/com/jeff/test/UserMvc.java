@@ -1,5 +1,6 @@
 package com.jeff.test;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.jeff.DI.DI;
 import com.jeff.mvc.MVC;
+import com.jeff.mvc.MvcContext;
 
 @MVC
 public class UserMvc {
@@ -64,6 +66,12 @@ public class UserMvc {
 
 	@MVC("testDateIn2")
 	public Date testDateIn2() {
+		try {
+			MvcContext.getInstance().setUsingJsonDateFormat(
+					new SimpleDateFormat("yyyy-MM-dd"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		Date date = new Date();
 		return date;
 	}
