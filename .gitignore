@@ -45,7 +45,7 @@ Temporary Items
 
 
 *.svn*
-*bulid/*
+build/*
 
 
 
